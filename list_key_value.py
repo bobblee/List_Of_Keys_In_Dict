@@ -18,8 +18,12 @@ def recursive_items(dictionary:dict):
 def recursive_append_items(dictionary:dict,appended_key:str=''):
     for key, value in dictionary.items():
         if type(value) is dict:
-            append_key = key+'_'
+            append_key = appended_key+key+'_'
             yield from recursive_append_items(value, append_key)
+        elif type(value) is list:
+            append_key = key+'_'
+            for array_value in value:
+                yield from recursive_append_items(array_value, append_key)
         else:
             yield (appended_key+key, value)
 
@@ -43,8 +47,23 @@ a = {'first': 'Bobby',
                 '5': 6
                 }
             },
-     'b': 7
+     'b': 7,
+     'c':[
+         {
+             '1' : 2,
+             '2' : 3,
+             '3' : 4
+         },
+         {
+             '1' : 2,
+             '2' : 3,
+             '4' : 5
+         }
+     ]
     }
+
+'''
+# Keeping for simple testing/review
 
 key_list = []
 for key, value in recursive_items(a):
@@ -53,11 +72,12 @@ for key, value in recursive_items(a):
 
 print(key_list)
 #key_list = remove_dups_from_list(key_list)
-#print(key_list)
+print(key_list)
 
-print(list_diff(key_list, base)) 
+print(list_diff(key_list, base))
 
 print('-----------------------')
+'''
 
 key_list = []
 for key, value in recursive_append_items(a):
@@ -65,7 +85,7 @@ for key, value in recursive_append_items(a):
     key_list.append(key)
 
 print(key_list)
-#key_list = remove_dups_from_list(key_list)
-#print(key_list)
+key_list = remove_dups_from_list(key_list)
+print(key_list)
 
 print(list_diff(key_list, append_base)) 
